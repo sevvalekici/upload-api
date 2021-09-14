@@ -9,6 +9,9 @@ const config = {
         port: process.env.PORT,
         host: process.env.HOST
     },
+    createUserKey: {
+        secretKey: process.env.CREATE_USER_SECRET
+    },
     awsConfig: {
         awsSecretAccessKey: process.env.AWS_SECRET_ACCESS,
         awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,

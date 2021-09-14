@@ -4,8 +4,9 @@
   "description": "media upload backend api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js"
+    "test": "jest --watch",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
   "author": "sevval ekici",
   "license": "ISC",
@@ -21,6 +22,8 @@
     "validator": "^13.6.0"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "jest": "^27.2.0",
+    "supertest": "^6.1.6"
   }
 }
