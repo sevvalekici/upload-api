@@ -13,8 +13,7 @@ app.use(mediaRouter)
 app.use(handlerRouter)
 
 const port = process.env.PORT || 3000
-const hostname = process.env.HOST || '127.0.0.1'
-app.listen(port, hostname, () => {
+app.listen(port, () => {
     console.log(`listening on port ${
         config.hosting.port
     }`)
