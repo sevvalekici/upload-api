@@ -1,9 +1,9 @@
 const express = require('express')
 const app = express()
-const config = require('./config')
-const userRouter = require('./src/routers/user')
-const mediaRouter = require('./src/routers/media')
-const handlerRouter = require('./src/routers/handler')
+const config = require('../config')
+const userRouter = require('./routers/user')
+const mediaRouter = require('./routers/media')
+const handlerRouter = require('./routers/handler')
 
 app.use(express.json())
 // to support urlencoded data
