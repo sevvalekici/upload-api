@@ -56,7 +56,8 @@ const getUserByUsername = async (username) => {
             username
         }
     }
-    return await dynamoClient.get(params).promise()
+    const user = await dynamoClient.get(params).promise()
+    return user.Item
 }
 
 const updateUser = async (user) => {
@@ -103,14 +104,14 @@ const tokenAuth = async (user) => {
 
 const findUser = async (username, password) => {
     const user = await getUserByUsername(username)
-    if (! user.Item) {
+    if (! user) {
         throw new Error('Unable to login')
     }
-    const isMatch = await bcrypt.compare(password, user.Item.password)
+    const isMatch = await bcrypt.compare(password, user.password)
     if (! isMatch) {
         throw new Error('Unable to login')
     }
-    return user.Item
+    return user
 }
 
 module.exports = {

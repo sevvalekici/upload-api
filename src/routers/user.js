@@ -6,15 +6,20 @@ const authenticationCheck = require('../middlewares/authentication_check')
 const authorization = require('../middlewares/authorization_check')
 const authorizationCheckAdmin = authorization.authorizationCheckAdmin
 const authorizationCheckNormal = authorization.authorizationCheckNormal
+const config = require('../../config')
 
 const router = new express.Router()
 
 router.post('/users', async (req, res) => {
     try {
-        const user = await User.addUser(req.body)
-        const token = await User.tokenAuth(user)
-        return res.status(201).send({user, token})
+        if(req.body.secret === config.createUserKey.secretKey){
+            delete req.body.secret
+            const user = await User.addUser(req.body)
+            const token = await User.tokenAuth(user)
+            return res.status(201).send({user, token})
+        }
     } catch (e) {
+        console.log(e)
         return res.status(400).send(e)
     }
 })
@@ -25,7 +30,7 @@ router.post('/users/login', async (req, res) => {
         await User.tokenAuth(user)
         return res.status(200).send(user)
     } catch (e) {
-        return res.status(400).send()
+        return res.status(400).send(e)
     }
 })
 
@@ -70,15 +75,15 @@ router.post('/users/logout', authenticationCheck, authorizationCheckNormal, asyn
     }
 })
 
-router.get('/users/myprofile', authenticationCheck, authorizationCheckNormal, async (req, res) => {
+router.get('/users/my/profile', authenticationCheck, authorizationCheckNormal, async (req, res) => {
     try {
         const username = req.user.username
-        const userToFind = await User.findOne({username})
+        console.log(username)
+        const userToFind = await User.getUserByUsername(username)
         if (! userToFind) {
             return res.status(404).send()
         }
-        // photoları generate et
-        return res.send(userToFind)
+        return res.status(200).send(userToFind)
     } catch (e) {
         return res.status(500).send()
     }
