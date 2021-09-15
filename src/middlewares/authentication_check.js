@@ -12,9 +12,9 @@ const authenticationCheck = async (req, res, next) => {
         if (! user) {
             throw new Error()
         }
-        if (user.Item.token === token) {
+        if (user.token === token) {
             req.token = token
-            req.user = user.Item
+            req.user = user
             next()
         }
     } catch (e) {

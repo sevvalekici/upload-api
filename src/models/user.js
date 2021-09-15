@@ -96,7 +96,7 @@ const verifyPassword = (password, user) => {
 const tokenAuth = async (user) => {
     const token = jwt.sign({
         username: user.username
-    }, config.jwttoken.secret, {expiresIn: '2d'})
+    }, config.jwttoken.secret, {expiresIn: '3d'})
     user.token = token
     await updateUser(user)
     return token

@@ -18,6 +18,7 @@ router.post('/users', async (req, res) => {
             const token = await User.tokenAuth(user)
             return res.status(201).send({user, token})
         }
+        return res.status(401).send()
     } catch (e) {
         console.log(e)
         return res.status(400).send(e)
@@ -46,8 +47,11 @@ router.get('/users', authenticationCheck, authorizationCheckAdmin, async (req, r
 router.get('/users/:username', authenticationCheck, authorizationCheckNormal, async (req, res) => {
     const username = req.params.username
     try {
-        const user = await User.getUserByUsername(username)
-        return res.status(200).send(user)
+        if( req.user.username === username){
+            const user = await User.getUserByUsername(username)
+            return res.status(200).send(user)
+        }
+        return res.status(401).send()
     } catch (e) {
         return res.status(500).send(e)
     }
@@ -65,7 +69,6 @@ router.delete('/users/:username', authenticationCheck, authorizationCheckAdmin, 
 router.post('/users/logout', authenticationCheck, authorizationCheckNormal, async (req, res) => {
     try {
         console.log('me here', req.user)
-        console.log(req.user)
         const loggedOutUser = await User.logoutUser(req.user)
         console.log(loggedOutUser)
         return res.status(200).send('Successfully logged out')
@@ -78,7 +81,6 @@ router.post('/users/logout', authenticationCheck, authorizationCheckNormal, asyn
 router.get('/users/my/profile', authenticationCheck, authorizationCheckNormal, async (req, res) => {
     try {
         const username = req.user.username
-        console.log(username)
         const userToFind = await User.getUserByUsername(username)
         if (! userToFind) {
             return res.status(404).send()

@@ -53,6 +53,7 @@ router.get('/media/myprofile', authenticationCheck, authorizationCheckNormal, as
         res.setHeader('Content-Type', 'text/html')
         return res.status(200).send(returnStr)
     } catch (e) {
+        console.log(e)
         return res.status(400).send()
     }
 })
