@@ -79,7 +79,7 @@ router.delete('/media/delete/:id', authenticationCheck, authorizationCheckNormal
             return res.status(404).send()
         }
         await Media.deleteMediaDoc(id, req.user.username, toDeleteMediaDoc.url)
-        return res.status(200).send('Deleted' + toDeleteMediaDoc.docname)
+        return res.status(200).send('Deleted ' + toDeleteMediaDoc.docname)
     } catch (e) {
         console.log(e)
         return res.status(500).send(e)
