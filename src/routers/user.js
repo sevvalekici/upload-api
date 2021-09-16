@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const Media = require('../models/media')
 // authentication middleware
 const authenticationCheck = require('../middlewares/authentication_check')
 // authorization middlewares
@@ -60,9 +61,15 @@ router.get('/users/:username', authenticationCheck, authorizationCheckNormal, as
 router.delete('/users/:username', authenticationCheck, authorizationCheckAdmin, async (req, res) => {
     const username = req.params.username
     try {
+        // clean all files of customer
+        let mediaDocs = await Media.getMediaDocsByUsername(username)
+        await Promise.all(mediaDocs.map(async (doc) => {
+           await Media.deleteMediaDoc(doc.id, username, doc.url)
+        }))
         await User.deleteUser(username)
         return res.status(200).send()
     } catch (e) {
+        console.log(e)
         return res.status(500).send(e)
     }
 })

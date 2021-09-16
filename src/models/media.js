@@ -1,4 +1,5 @@
 const dynamoClient = require('../aws/dynamo_db')
+const bucket = require('../aws/s3_bucket')
 const uuid = require('uuid')
 const tableName = 'media-table'
 
@@ -65,7 +66,7 @@ const updateMediaDoc = async (mediaDoc) => {
     return updatedMediaDoc.Item
 }
 
-const deleteMediaDoc = async (id, username) => {
+const deleteMediaDoc = async (id, username, url) => {
     const params = {
         TableName: tableName,
         Key: {
@@ -73,6 +74,7 @@ const deleteMediaDoc = async (id, username) => {
             username
         }
     }
+    bucket.deleteFile(url)
     return await dynamoClient.delete(params).promise()
 }
 
